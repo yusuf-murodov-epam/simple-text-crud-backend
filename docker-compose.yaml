@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:latest
+    hostname: db
+    container_name: db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - simple-text-crud-network
+
+  simple-text-crud:
+    image: simple-text-crud:${TAG}
+    hostname: simple-text-crud
+    container_name: simple-text-crud
+    restart: always
+    ports:
+      - "2304:8080"
+      - "8002:8001"
+    depends_on:
+      - "db"
+    environment:
+      DB_HOST: db
+      DB_PORT: ${DB_PORT}
+      DB_USERNAME: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    networks:
+      - simple-text-crud-network
+
+volumes:
+  postgres_data:
+
+networks:
+  simple-text-crud-network:
+    driver: bridge

@@ -1,0 +1,29 @@
+application:
+  database:
+    host: ${DB_HOST}
+    port: ${DB_PORT}
+    name: ${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: true
+    include-message: always
+    include-stacktrace: never
+
+spring:
+  application:
+    name: ${SERVICE_NAME:simple-text-service}
+  datasource:
+    url: jdbc:postgresql://${application.database.host}:${application.database.port}/${application.database.name}
+    username: ${application.database.username}
+    password: ${application.database.password}
+    driver-class-name: org.postgresql.Driver
+    maxIdle: 30
+    maxWait: 10000
+    maxActive: 100
+  jpa.hibernate.ddl-auto: create-drop
+  database-platform: org.hibernate.dialect.PostgreSQLDialect
